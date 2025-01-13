@@ -1,0 +1,19 @@
+img.picChoice{
+    max-width: 350px;
+    max-height: 250px;
+    border-radius: 15px;
+}
+
+img.picChoice:hover{
+    filter: drop-shadow(0 0 2em #646cffaa);
+    color: greenyellow;
+}
+
+.allChoices{
+    display: flex;
+    flex-direction: horizontal;
+}
+
+.allChoices div:hover{
+    color: greenyellow;
+}

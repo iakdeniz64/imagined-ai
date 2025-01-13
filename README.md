@@ -1,2 +1,2 @@
 # imagined-ai
-Remake your favorite scene using GenAI.
+Remake your favorite scenes using AI.
