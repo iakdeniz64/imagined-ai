@@ -1,69 +1,111 @@
-import {useLocation} from 'react-router-dom';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import titanicPicture from '.././assets/titanic.jpg'
 import theshiningPicture from '.././assets/theshining.png'
 import bladerunnerPicture from '.././assets/bladerunner.png'
+import { useNavigate } from "react-router-dom";
 import './PickedMovie.css';
+import OpenAI from 'openai';
+
+const VITE_APP_API_KEY='REMOVED';
 
 export default function PickedMovie(){
-    const [widthStyle, setWidthStyle] = useState('300px');
-    const [heightStyle, setHeightStyle] = useState('200px');
+    const navigate = useNavigate();
+    
+    const [chosenMovie, setChosenMovie] = useState('')
+    const [picture, setPicture] = useState('');
 
-    const location = useLocation()
-    let pathName = '';
-    let newPic: any;
-    let niceName = '';
+    //OpenAI Stuff
+    const [generatedImage, setGeneratedImage] = useState("");
+    const [loading, setIsLoading] = useState(false);
+    const [copyText, setCopyText]= useState('Copy URL')
 
-    if (location.pathname == "/moviechosen/titanic"){
-        pathName = 'titanic';
-        niceName = 'Titanic';
-        newPic = titanicPicture;
+    const openai = new OpenAI({
+        apiKey: VITE_APP_API_KEY, // This is also the default, can be omitted
+        dangerouslyAllowBrowser: true // This is DANGEROUS! Remove later!
+      });
+
+  const handleImageHandler = async (e) => {
+    setCopyText('Copy URL');
+    try {
+      setIsLoading(true);
+      e.preventDefault()
+      const result = await openai.images.generate({
+        prompt: (chosenMovie + ' movie'),
+        n: 1,
+        size: "512x512",
+      });
+
+      console.log(result, 'result')
+      setGeneratedImage(result.data[0].url);
+      setIsLoading(false);
+    } catch (e) {
+      setIsLoading(false);
+      console.log(e);
     }
+  };
 
-    else if (location.pathname == "/moviechosen/theshining"){
-        pathName = 'theshining';
-        niceName = 'The Shining';
-        newPic = theshiningPicture;
-    }
+  const handleCopyToClipboard = () => {
+    navigator.clipboard.writeText(generatedImage)
+      .then(() => {
+        console.log("Image URL copied to clipboard");
+        setCopyText("Copied URL!")
+      })
+      .catch((error) => {
+        console.error("Failed to copy image URL to clipboard:", error);
+      });
+  };
 
-    else if (location.pathname == "/moviechosen/bladerunner"){
-        pathName = 'bladerunner';
-        niceName = 'Bladerunner'
-        newPic = bladerunnerPicture;
-    }
-
-    const randomNumberInRange = (min: any, max: any) => {
-        return Math.floor(Math.random()
-            * (max - min + 1)) + min;
-    };
-
-    const doSomething = () => {
-        let chosenRandomNumber = 0;
-
-        const dimensionsChoices = [100, 150, 200, 250, 300, 350, 400, 450, 500];
-
-        chosenRandomNumber = randomNumberInRange(1, 9);
-        setWidthStyle(dimensionsChoices[chosenRandomNumber]);
-        console.log(chosenRandomNumber)
-
-        chosenRandomNumber = randomNumberInRange(1, 9);
-        setHeightStyle(dimensionsChoices[chosenRandomNumber]);
-        console.log(chosenRandomNumber)
-
-    }
-
+    useEffect(() => {
+        if (!localStorage.getItem("movieChoice")){
+            console.log("No movie chosen, redirecting to Home.")
+            navigate('/');
+        } else {
+            setChosenMovie(JSON.parse(localStorage.getItem("movieChoice")));
+            if (JSON.parse(localStorage.getItem("movieChoice")) == "Titanic"){
+                setPicture(titanicPicture);
+            }
+        
+            else if (JSON.parse(localStorage.getItem("movieChoice")) == "The Shining"){
+                setPicture(theshiningPicture);
+            }
+        
+            else if (JSON.parse(localStorage.getItem("movieChoice")) == "Bladerunner"){
+                setPicture(bladerunnerPicture);
+            }
+        }
+    }, []);
+    
     return(
         <>
             <h2>You chose</h2>
             <div className='chosenMovie'>
-                    <img src={newPic} className="picChoice" alt={pathName} style={{ minWidth: widthStyle, maxWidth: widthStyle, minHeight: heightStyle, maxHeight: heightStyle}} />
-                    <h3>{niceName}</h3>
+                    <img src={picture} className="picChoice" />
+                    <h3>{chosenMovie}</h3>
                     <h3>
                         <div className='card'>
-                            <button onClick={doSomething} className='changePicture'>Change this Picture!</button>
+                            <button onClick={handleImageHandler} className='changePicture'>Get a generated picture based on this title!</button>
                         </div>
                     </h3>
             </div>
+
+            <div className="image__box">
+                {loading ? (
+                <>
+                    <p>Please Wait!</p>
+                    <p>This will only take a few seconds</p>
+                </>
+                ) : (
+                <>
+                    {generatedImage && (
+                    <div className="image__actions">
+                        <button onClick={handleCopyToClipboard}>{copyText}</button>
+                    </div>
+                    )}
+                    <img src={generatedImage} alt="" />
+                </>
+                )}
+            </div>
+
 
             <div className='card'>
                 <a href='/movies'>
