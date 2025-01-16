@@ -5,27 +5,33 @@ import './Movies.css'
 
 export default function Movies() {
 
+    const choiceHandler = (name: string) => {
+        localStorage.setItem("movieChoice", "")
+        localStorage.setItem("movieChoice", JSON.stringify(name))
+        console.log(localStorage.getItem("movieChoice"))
+    }
+
     return (
         <>
             <h1>Movies</h1>
             <h3>Out of the 3 choices below, pick one!</h3>
 
             <div className='allChoices'>
-                <div className='titanic'>
+                <div className='titanic' onClick={() => choiceHandler('Titanic')}>
                     <a href='/moviechosen/titanic'>
                     <img src={titanicPicture} className="picChoice" alt='picture 1' /> 
                     <h3>Titanic</h3>
                     </a>
                 </div>
 
-                <div className='theshining'>
+                <div className='theshining' onClick={() => choiceHandler('The Shining')}>
                     <a href='/moviechosen/theshining'>
                     <img src={theshiningPicture} className="picChoice" alt='picture 2' />
                     <h3>The Shining</h3>
                     </a>
                 </div>
 
-                <div className='bladerunner'>
+                <div className='bladerunner' onClick={() => choiceHandler('Bladerunner')}>
                     <a href='/moviechosen/bladerunner'>
                     <img src={bladerunnerPicture} className="picChoice" alt='picture 3' />
                     <h3>Bladerunner</h3>
