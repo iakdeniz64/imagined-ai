@@ -1,15 +1,15 @@
 import { useEffect, useState } from 'react';
-import titanicPicture from '.././assets/titanic.jpg'
-import theshiningPicture from '.././assets/theshining.png'
-import bladerunnerPicture from '.././assets/bladerunner.png'
+import onepiecePicture from '.././assets/onepiece.jpg'
+import mhaPicture from '.././assets/mha.jpg'
+import narutoPicture from '.././assets/naruto.jpg'
 import { useNavigate } from "react-router-dom";
-import './PickedMovie.css';
+import './PickedAnime.css';
 import { BeatLoader } from 'react-spinners';
 import OpenAiTool from '../OpenAITool';
 
-export default function PickedMovie(){
+export default function PickedAnime(){
     const navigate = useNavigate();
-    const [chosenMovie, setChosenMovie] = useState('')
+    const [chosenAnime, setChosenAnime] = useState('')
     const [picture, setPicture] = useState('');
 
     //OpenAI Stuff
@@ -22,7 +22,7 @@ export default function PickedMovie(){
     try {
       setIsLoading(true);
       e.preventDefault()
-      const result = await OpenAiTool(chosenMovie, 'movie');
+      const result = await OpenAiTool(chosenAnime, 'anime');
       setGeneratedImage(result.data[0].url);
       setIsLoading(false);
     } catch (e) {
@@ -43,21 +43,21 @@ export default function PickedMovie(){
   };
 
     useEffect(() => {
-        if (!localStorage.getItem("movieChoice")){
-            console.log("No movie chosen, redirecting to Home.")
+        if (!localStorage.getItem("animeChoice")){
+            console.log("No anime chosen, redirecting to Home.")
             navigate('/');
         } else {
-            setChosenMovie(JSON.parse(localStorage.getItem("movieChoice")));
-            if (JSON.parse(localStorage.getItem("movieChoice")) == "Titanic"){
-                setPicture(titanicPicture);
+            setChosenAnime(JSON.parse(localStorage.getItem("animeChoice")));
+            if (JSON.parse(localStorage.getItem("animeChoice")) == "One Piece"){
+                setPicture(onepiecePicture);
             }
         
-            else if (JSON.parse(localStorage.getItem("movieChoice")) == "The Shining"){
-                setPicture(theshiningPicture);
+            else if (JSON.parse(localStorage.getItem("animeChoice")) == "My Hero Academia"){
+                setPicture(mhaPicture);
             }
         
-            else if (JSON.parse(localStorage.getItem("movieChoice")) == "Bladerunner"){
-                setPicture(bladerunnerPicture);
+            else if (JSON.parse(localStorage.getItem("animeChoice")) == "Naruto"){
+                setPicture(narutoPicture);
             }
         }
     }, []);
@@ -65,9 +65,9 @@ export default function PickedMovie(){
     return(
         <>
             <h2>You chose</h2>
-            <div className='chosenMovie'>
+            <div className='chosenAnime'>
                     <img src={picture} className="picChoice" />
-                    <h3>{chosenMovie}</h3>
+                    <h3>{chosenAnime}</h3>
                     <h3>
                         <div className='card'>
                             <button onClick={handleImageHandler} className='changePicture'>Get a generated picture based on this title!</button>
@@ -95,8 +95,8 @@ export default function PickedMovie(){
             </div>
 
             <div className='card'>
-                <a href='/movies'>
-                    <button className='buttonMovies'>Back To Movies!</button>
+                <a href='/anime'>
+                    <button className='buttonMovies'>Back To Anime!</button>
                 </a>
                 <a href='/'>
                     <button className='buttonMovies'>Back To Home!</button>

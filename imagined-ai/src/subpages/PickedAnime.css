@@ -1,0 +1,14 @@
+.chosenMovie img.picChoice{
+    min-width: 300px;
+    max-width: 300px;
+    min-height: 200px; 
+    max-height: 200px;
+}
+
+.changePicture{
+    border-color: green;
+}
+
+.image__box img{
+    border-radius: 15px;
+}
