@@ -1,7 +1,5 @@
 img.picChoice{
-    min-width: 350px;
     max-width: 350px;
-    min-height: 250px;
     max-height: 250px;
     border-radius: 15px;
 }
