@@ -67,7 +67,7 @@ export default function PickedAnime(){
             <h2>You chose</h2>
             <div className='chosenAnime'>
                     <img src={picture} className="picChoice" />
-                    <h3>{chosenAnime}</h3>
+                    <h3 className='subtitle'>{chosenAnime}</h3>
                     <h3>
                         <div className='card'>
                             <button onClick={handleImageHandler} className='changePicture'>Get a generated picture based on this title!</button>
