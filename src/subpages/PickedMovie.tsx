@@ -67,7 +67,7 @@ export default function PickedMovie(){
             <h2>You chose</h2>
             <div className='chosenMovie'>
                     <img src={picture} className="picChoice" />
-                    <h3>{chosenMovie}</h3>
+                    <h3 className='subtitle'>{chosenMovie}</h3>
                     <h3>
                         <div className='card'>
                             <button onClick={handleImageHandler} className='changePicture'>Get a generated picture based on this title!</button>

@@ -67,7 +67,7 @@ export default function PickedTvShow(){
             <h2>You chose</h2>
             <div className='chosenTvShow'>
                     <img src={picture} className="picChoice" />
-                    <h3>{chosenTvShow}</h3>
+                    <h3 className='subtitle'>{chosenTvShow}</h3>
                     <h3>
                         <div className='card'>
                             <button onClick={handleImageHandler} className='changePicture'>Get a generated picture based on this title!</button>
