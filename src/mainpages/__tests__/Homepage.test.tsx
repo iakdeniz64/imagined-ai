@@ -4,7 +4,7 @@
 
 import { expect, test } from 'vitest'
 import {render, screen, } from '@testing-library/react'
-import Homepage from "../mainpages/Homepage"
+import Homepage from "../Homepage"
 
 render(<Homepage/>)
 const currentPage = window.location.href;
@@ -15,7 +15,6 @@ test('"Imagined" text is in page', async () => {
   imagineTextElements.forEach(element => {
     expect(element.textContent).to.equal("Imagined");
   });
-
 });
 
 test('Total of 3 buttons are in page', async () => {
