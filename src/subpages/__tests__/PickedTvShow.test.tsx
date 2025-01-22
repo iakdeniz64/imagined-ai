@@ -34,7 +34,11 @@ test('Button 1 has text "Get a generated picture based on this title!"', async (
     expect(buttonTotal[0]).to.be.equals(homeButtonText[0]);
 })
 
-test('PLACEHOLDER for "Generating Image" button', async () => {
+test('PLACEHOLDER for "Generating Image" button sending a request', async () => {
+
+})
+
+test('PLACEHOLDER for a new image being in the page', async () => {
 
 })
 
