@@ -83,7 +83,3 @@ test('Third choice is "Bladerunner" and has corresponding picture', async () => 
 test('Third choice links to the correct movie page', async () => {
     expect((movieLinks[2] as HTMLAnchorElement).href).toBe(`${currentPage}moviechosen/bladerunner`)
 })
-
-test('111', async () => {
-
-})
