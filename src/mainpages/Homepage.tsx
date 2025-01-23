@@ -1,6 +1,19 @@
 import './Homepage.css'
+import axios from 'axios';
 
 export default function Homepage() {
+
+    const getUsersTest = () => {
+        axios.get('http://localhost:5000/users')
+            .then((response) => {
+                console.log('Users:', response.data);  // Handle the response data (users list)
+                return (response.data)
+            })
+            .catch((error) => {
+                console.error('Error fetching users:', error);  // Handle errors
+            });
+    }
+
     localStorage.setItem("movieChoice", "")
     return (
         <>
@@ -28,6 +41,7 @@ export default function Homepage() {
                     </h2>
                 </div>
             </div>
+            <button className='buttonUsers' onClick={getUsersTest}>Get test</button>
         </>
     )
 }
