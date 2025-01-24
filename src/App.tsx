@@ -7,6 +7,7 @@ import PickedTvShow from './subpages/PickedTvShow'
 import Anime from './mainpages/Anime'
 import PickedAnime from './subpages/PickedAnime'
 import './App.css'
+import UserRegistration from './authpages/UserRegistration'
 
 function App() {
   return (
@@ -19,6 +20,7 @@ function App() {
         <Route path='/tvshowchosen/*' element={<PickedTvShow/>} />
         <Route path='/anime' element={<Anime/>} />
         <Route path='/animechosen/*' element={<PickedAnime/>} />
+        <Route path='/registration' element={<UserRegistration/>} />
       </Routes>
     </BrowserRouter>
   )

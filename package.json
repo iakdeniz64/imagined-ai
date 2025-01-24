@@ -13,10 +13,12 @@
   "dependencies": {
     "@testing-library/user-event": "^14.6.0",
     "axios": "^1.7.9",
+    "bcrypt": "^5.1.1",
     "cors": "^2.8.5",
     "dotenv": "^16.4.7",
     "express": "^4.21.2",
     "jest-environment-jsdom": "^29.7.0",
+    "jsonwebtoken": "^9.0.2",
     "node": "^22.13.0",
     "openai": "^4.78.1",
     "pg": "^8.13.1",
