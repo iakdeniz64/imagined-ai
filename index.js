@@ -64,13 +64,6 @@ app.post('/register', async (req, res) => {
     });
   });
 
-  app.get('/getallusers', async (req, res) => {
-    const result = await pool.query(
-        'SELECT * FROM users'
-    );
-
-    res.json({ urls: result.rows });
-});
 
 
 app.post('/login', async (req, res) => {
@@ -118,6 +111,16 @@ app.post('/add-url', verifyToken, async (req, res) => {
       urls: result.rows[0].urls,
     });
   });
+
+// Verander dit naar del urls
+app.get('/getallusers', async (req, res) => {
+  const result = await pool.query(
+      'SELECT * FROM users'
+  );
+
+  res.json({ urls: result.rows });
+});
+
 
 app.get('/my-urls', verifyToken, async (req, res) => {
     const result = await pool.query(

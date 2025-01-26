@@ -16,6 +16,22 @@ export async function registerUser(username: string, password: string) {
       }
 }
 
+export async function loginUser(username: string, password: string) {
+  try {
+    const response = await axios.post('http://localhost:5000/login', {
+      username,
+      password,
+    });
+    return response.data;
+  } catch (error: any) {
+    if (error.response) {
+      throw error.response.data.message;
+    } else {
+      throw 'An error occurred. Please try again later.';
+    }
+  }
+}
+
 export async function getAllUsers() {
     try {
         const response = await axios.get('http://localhost:5000/getallusers')

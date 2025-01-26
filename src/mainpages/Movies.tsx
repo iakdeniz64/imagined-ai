@@ -1,12 +1,13 @@
 import titanicPicture from '.././assets/titanic.jpg'
 import theshiningPicture from '.././assets/theshining.png'
 import bladerunnerPicture from '.././assets/bladerunner.png'
+import Button from '../components/Button'
 import './Movies.css'
 
 export default function Movies() {
 
     const choiceHandler = (name: string) => {
-        localStorage.setItem("movieChoice", "")
+        localStorage.setItem("movieChoice", "") // misschien dit hierboven zetten?
         localStorage.setItem("movieChoice", JSON.stringify(name))
         console.log(localStorage.getItem("movieChoice"))
     }
@@ -14,7 +15,7 @@ export default function Movies() {
     return (
         <>
             <h1>Movies</h1>
-            <h3>Out of the 3 choices below, pick one!</h3>
+            <h2>Pick one</h2>
 
             <div className='allChoices'>
                 <div className='titanic' onClick={() => choiceHandler('Titanic')}>
@@ -38,11 +39,9 @@ export default function Movies() {
                     </a>
                 </div>
             </div>
-
-            <div className='card'>
-                <a href='/'>
-                    <button className='buttonMovies'>Back To Home!</button>
-                </a>
+            
+            <div className="selectionButtons">
+                <Button destination="/" buttontext="Homepage" size='larger'/>
             </div>
         </>
     )

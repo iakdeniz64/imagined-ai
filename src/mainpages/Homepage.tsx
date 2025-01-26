@@ -1,32 +1,38 @@
+import { useState, useEffect } from 'react'
 import './Homepage.css'
+import Button from '../components/Button';
 
 export default function Homepage() {
-    localStorage.setItem("movieChoice", "")
+    const [userText, setUserText] = useState('Not logged in...');
+
+    useEffect(() => {
+        if (!localStorage.getItem("JWToken")) {
+            localStorage.setItem("JWToken", "")
+        } else if (localStorage.getItem("JWToken")){
+            setUserText('Logged In!')
+        }
+        else(console.log('what now?'))
+    }, []);
+
+    // niet goed.. allen alten zien als logged in
+    const handleLogoutClick = () => {
+        localStorage.setItem("JWToken", "")
+        setUserText('Not logged in...')
+    }
+
     return (
         <>
-        <h1 className='mainTitle'>Imagined</h1>
-            <div className="selectionButtons">
-                <div className='card'>
-                    <h2>
-                        <a href='/movies'>
-                            <button className='buttonMovies'>Movies</button>
-                        </a>
-                    </h2>
-                </div>
-                <div className='card'>
-                    <h2>
-                        <a href='/tvshows'>
-                            <button className='buttonTvShows'>TV Shows</button>
-                        </a>
-                    </h2>
-                </div>
-                <div className='card'>
-                    <h2>
-                        <a href='/anime'>
-                            <button className='buttonAnime'>Anime</button>
-                        </a>
-                    </h2>
-                </div>
+            <h1>Imagined</h1>
+                <Button destination="/movies" buttontext="Movies" size='larger'/>
+                <Button destination="/tvshows" buttontext="TV Shows" size='larger'/>
+                <Button destination="/anime" buttontext="Anime" size='larger'/>
+            <div className='regloginButtons'>
+                {!localStorage.getItem("JWToken") 
+                ? <div className="selectionButtons">
+                <Button destination="/registration" buttontext="Registration"/>
+                    <Button destination="/login" buttontext="Login"/> </div>
+                : <button onClick={handleLogoutClick}>Log Out</button>
+                }
             </div>
         </>
     )

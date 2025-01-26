@@ -1,11 +1,13 @@
-import { useState } from 'react';
-import { registerUser, getAllUsers } from '../CallsToBackend';
+import { useEffect, useState } from 'react';
+import { loginUser, getAllUsers } from '../CallsToBackend';
+import { useNavigate } from "react-router-dom";
 
-export default function UserRegistration(){
+export default function UserLogin(){
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
+  const navigate = useNavigate();
 
   const getAllButtonHandler = async (event: any) => {
     event.preventDefault();
@@ -21,20 +23,28 @@ export default function UserRegistration(){
     setSuccess('');
 
     try {
-      const response = await registerUser(username, password);
+      const response = await loginUser(username, password);
 
       setSuccess(response.message);
+      localStorage.setItem("JWToken", response.token)
       setUsername('');
       setPassword('');
+      navigate('/')
     } catch (err: any) {
       setError(err);
     }
   };
 
+  useEffect(() => {
+    if (localStorage.getItem("JWToken")){
+        navigate('/')
+    }
+}, []);
+
   return (
     <>
         <div>
-        <h2>Registration</h2>
+        <h2>Login</h2>
         <form onSubmit={handleSubmit}>
             <div>
             <label htmlFor="username">Username: </label>
@@ -56,7 +66,7 @@ export default function UserRegistration(){
                 required
             />
             </div>
-            <button type="submit">Register</button>
+            <button type="submit">Login</button>
         </form>
 
         {error && <div style={{ color: 'red' }}>{error}</div>}
