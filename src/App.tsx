@@ -8,6 +8,7 @@ import Anime from './mainpages/Anime'
 import PickedAnime from './subpages/PickedAnime'
 import './App.css'
 import UserRegistration from './authpages/UserRegistration'
+import UserLogin from './authpages/UserLogin'
 
 function App() {
   return (
@@ -21,6 +22,7 @@ function App() {
         <Route path='/anime' element={<Anime/>} />
         <Route path='/animechosen/*' element={<PickedAnime/>} />
         <Route path='/registration' element={<UserRegistration/>} />
+        <Route path='/login' element={<UserLogin/>} />
       </Routes>
     </BrowserRouter>
   )
