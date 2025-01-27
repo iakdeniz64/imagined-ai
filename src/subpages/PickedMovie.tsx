@@ -3,7 +3,6 @@ import titanicPicture from '.././assets/titanic.jpg'
 import theshiningPicture from '.././assets/theshining.png'
 import bladerunnerPicture from '.././assets/bladerunner.png'
 import { useNavigate } from "react-router-dom";
-import './PickedMovie.css';
 import { BeatLoader } from 'react-spinners';
 import OpenAiTool from '../OpenAITool';
 

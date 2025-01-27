@@ -9,20 +9,18 @@ import PickedAnime from './subpages/PickedAnime'
 import './App.css'
 import UserRegistration from './authpages/UserRegistration'
 import UserLogin from './authpages/UserLogin'
+import ContentChoiceMenu from './mainpages/ContentChoiceMenu'
+import GenerationPage from './mainpages/GenerationPage'
 
 function App() {
   return (
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<Homepage/>} />
-        <Route path="/movies" element={<Movies/>} />
-        <Route path='/moviechosen/*' element={<PickedMovie/>} />
-        <Route path="/tvshows" element={<TvShows/>} />
-        <Route path='/tvshowchosen/*' element={<PickedTvShow/>} />
-        <Route path='/anime' element={<Anime/>} />
-        <Route path='/animechosen/*' element={<PickedAnime/>} />
         <Route path='/registration' element={<UserRegistration/>} />
         <Route path='/login' element={<UserLogin/>} />
+        <Route path='/contentchoice' element={<ContentChoiceMenu/>} />
+        <Route path='/contentchoice/:id' element={<GenerationPage/>} />
       </Routes>
     </BrowserRouter>
   )

@@ -3,7 +3,6 @@ import gameofthronesPicture from '.././assets/got.jpg'
 import theofficePicture from '.././assets/theoffice.jpg'
 import breakingbadPicture from '.././assets/breakingbad.png'
 import { useNavigate } from "react-router-dom";
-import './PickedTvShow.css';
 import { BeatLoader } from 'react-spinners';
 import OpenAiTool from '../OpenAITool';
 

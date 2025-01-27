@@ -1,7 +1,6 @@
 import onepiecePicture from '.././assets/onepiece.jpg'
 import mhaPicture from '.././assets/mha.jpg'
 import narutoPicture from '.././assets/naruto.jpg'
-import './Anime.css'
 
 export default function Anime() {
     const choiceHandler = (name: string) => {

@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import './Homepage.css'
+import './styles/Homepage.css'
 import Button from '../components/Button';
 import { getCurrentUserInfo } from '../CallsToBackend'
 
@@ -31,10 +31,9 @@ export default function Homepage() {
 
     return (
         <>
-            <h1>Imagined</h1>
-                <Button destination="/movies" buttontext="Movies" size='larger'/>
-                <Button destination="/tvshows" buttontext="TV Shows" size='larger'/>
-                <Button destination="/anime" buttontext="Anime" size='larger'/>
+        <div className='flex flex-col'>
+            <h1 className='flex text-center'>Imagined</h1>
+            <Button destination="/contentchoice" buttontext="Start Generating!" size='larger'/>
             <div className='regloginButtons'>
                 {!localStorage.getItem("JWToken") 
                 ? <div className="selectionButtons">
@@ -46,6 +45,8 @@ export default function Homepage() {
                 <button onClick={handleLogoutClick}>Log Out</button>
                 </div>}
             </div>
+        </div>
+
         </>
     )
 }
