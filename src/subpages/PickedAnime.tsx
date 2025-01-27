@@ -3,7 +3,6 @@ import onepiecePicture from '.././assets/onepiece.jpg'
 import mhaPicture from '.././assets/mha.jpg'
 import narutoPicture from '.././assets/naruto.jpg'
 import { useNavigate } from "react-router-dom";
-import './PickedAnime.css';
 import { BeatLoader } from 'react-spinners';
 import OpenAiTool from '../OpenAITool';
 

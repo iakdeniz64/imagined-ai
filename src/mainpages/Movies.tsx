@@ -2,7 +2,6 @@ import titanicPicture from '.././assets/titanic.jpg'
 import theshiningPicture from '.././assets/theshining.png'
 import bladerunnerPicture from '.././assets/bladerunner.png'
 import Button from '../components/Button'
-import './Movies.css'
 
 export default function Movies() {
 

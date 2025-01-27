@@ -1,7 +1,6 @@
 import gameofthronesPicture from '.././assets/got.jpg'
 import theofficePicture from '.././assets/theoffice.jpg'
 import breakingbadPicture from '.././assets/breakingbad.png'
-import './TvShows.css'
 
 export default function TvShows() {
 
