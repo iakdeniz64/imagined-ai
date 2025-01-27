@@ -1,23 +1,32 @@
 import { useState, useEffect } from 'react'
 import './Homepage.css'
 import Button from '../components/Button';
+import { getCurrentUserInfo } from '../CallsToBackend'
 
 export default function Homepage() {
-    const [userText, setUserText] = useState('Not logged in...');
+    const [userText, setUserText] = useState('');
+    const [userInfo, setUserInfo] = useState('');
 
     useEffect(() => {
         if (!localStorage.getItem("JWToken")) {
             localStorage.setItem("JWToken", "")
         } else if (localStorage.getItem("JWToken")){
-            setUserText('Logged In!')
+            // GET User INfO, add in setUserTExt!
+            const currentUser = localStorage.getItem("CurrentUser")
+            const currentJWT = localStorage.getItem("JWToken")
+            getCurrentUserInfo(currentUser, currentJWT).then((element) =>
+                setUserInfo(element) //myusername = string, myurls = array
+            )
+            setUserText('You are logged in, ')
         }
-        else(console.log('what now?'))
+        else(console.log('Error...'))
     }, []);
 
     // niet goed.. allen alten zien als logged in
     const handleLogoutClick = () => {
         localStorage.setItem("JWToken", "")
-        setUserText('Not logged in...')
+        localStorage.setItem("CurrentUser", "")
+        setUserText('')
     }
 
     return (
@@ -29,10 +38,13 @@ export default function Homepage() {
             <div className='regloginButtons'>
                 {!localStorage.getItem("JWToken") 
                 ? <div className="selectionButtons">
-                <Button destination="/registration" buttontext="Registration"/>
-                    <Button destination="/login" buttontext="Login"/> </div>
-                : <button onClick={handleLogoutClick}>Log Out</button>
-                }
+                    <Button destination="/registration" buttontext="Registration"/>
+                    <Button destination="/login" buttontext="Login"/>
+                </div>
+                : <div className='loggedInUser'>
+                {`${userText} ${userInfo.myusername}. `}
+                <button onClick={handleLogoutClick}>Log Out</button>
+                </div>}
             </div>
         </>
     )
