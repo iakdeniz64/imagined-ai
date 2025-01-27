@@ -112,23 +112,17 @@ app.post('/add-url', verifyToken, async (req, res) => {
     });
   });
 
-// Verander dit naar del urls
-app.get('/getallusers', async (req, res) => {
-  const result = await pool.query(
-      'SELECT * FROM users'
-  );
-
-  res.json({ urls: result.rows });
-});
-
-
-app.get('/my-urls', verifyToken, async (req, res) => {
+app.get('/my-data', verifyToken, async (req, res) => {
     const result = await pool.query(
-        'SELECT urls FROM users WHERE id = $1',
+        'SELECT username, urls FROM users WHERE id = $1',
         [req.user.userId]
     );
 
-    res.json({ urls: result.rows[0].urls });
+    res.json({ 
+      myusername: result.rows[0].username,
+      myurls: result.rows[0].urls
+     });
+
 });
 
 

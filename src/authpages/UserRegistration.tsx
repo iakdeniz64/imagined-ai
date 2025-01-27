@@ -1,18 +1,13 @@
-import { useState } from 'react';
-import { registerUser, getAllUsers } from '../CallsToBackend';
+import { useEffect, useState } from 'react';
+import { registerUser } from '../CallsToBackend';
+import { useNavigate } from "react-router-dom";
 
 export default function UserRegistration(){
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
-
-  const getAllButtonHandler = async (event: any) => {
-    event.preventDefault();
-    
-    const allUsers = await getAllUsers()
-    console.log(allUsers)
-  }
+  const navigate = useNavigate();
 
   const handleSubmit = async (event: any) => {
     event.preventDefault();
@@ -30,6 +25,13 @@ export default function UserRegistration(){
       setError(err);
     }
   };
+
+  useEffect(() => {
+      //Redirect back to homepage if logged in
+      if (localStorage.getItem("JWToken")){
+          navigate('/')
+      }
+  }, []);
 
   return (
     <>
@@ -61,9 +63,6 @@ export default function UserRegistration(){
 
         {error && <div style={{ color: 'red' }}>{error}</div>}
         {success && <div style={{ color: 'green' }}>{success}</div>}
-        </div>
-        <div className='getallButton'>
-            <button type='submit' onClick={getAllButtonHandler}>Get All Current Users!</button>
         </div>
 
         <div className='card'>

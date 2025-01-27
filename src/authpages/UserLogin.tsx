@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { loginUser, getAllUsers } from '../CallsToBackend';
+import { loginUser } from '../CallsToBackend';
 import { useNavigate } from "react-router-dom";
 
 export default function UserLogin(){
@@ -8,13 +8,6 @@ export default function UserLogin(){
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
   const navigate = useNavigate();
-
-  const getAllButtonHandler = async (event: any) => {
-    event.preventDefault();
-    
-    const allUsers = await getAllUsers()
-    console.log(allUsers)
-  }
 
   const handleSubmit = async (event: any) => {
     event.preventDefault();
@@ -27,6 +20,8 @@ export default function UserLogin(){
 
       setSuccess(response.message);
       localStorage.setItem("JWToken", response.token)
+      // test line hieronder om username in localstorage te zetten
+      localStorage.setItem("CurrentUser", username)
       setUsername('');
       setPassword('');
       navigate('/')
@@ -36,6 +31,7 @@ export default function UserLogin(){
   };
 
   useEffect(() => {
+    //Redirect back to homepage if logged in
     if (localStorage.getItem("JWToken")){
         navigate('/')
     }
@@ -71,9 +67,6 @@ export default function UserLogin(){
 
         {error && <div style={{ color: 'red' }}>{error}</div>}
         {success && <div style={{ color: 'green' }}>{success}</div>}
-        </div>
-        <div className='getallButton'>
-            <button type='submit' onClick={getAllButtonHandler}>Get All Current Users!</button>
         </div>
 
         <div className='card'>

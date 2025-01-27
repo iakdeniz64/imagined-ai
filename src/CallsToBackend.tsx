@@ -32,17 +32,22 @@ export async function loginUser(username: string, password: string) {
   }
 }
 
-export async function getAllUsers() {
-    try {
-        const response = await axios.get('http://localhost:5000/getallusers')
-        return response.data;
-    } catch (error: any) {
-        // If the backend returns an error (like username already taken), throw it
-        if (error.response) {
-          throw error.response.data.message;  // Error from the backend (e.g. Username already taken)
-        } else {
-          // Generic error message in case of no response (e.g. network issues)
-          throw 'An error occurred. Please try again later.';
+export async function getCurrentUserInfo(username: string, jwt: string) {
+  try {
+      const response = await axios.get('http://localhost:5000/my-data', {
+        headers: {
+          Authorization: `Bearer ${jwt}`,
+        },
+        params: {
+          username,
         }
+      })
+      return response.data;
+  } catch (error: any) {
+      if (error.response) {
+        throw error.response.data.message;
+      } else {
+        throw 'An error occurred. Please try again later.';
       }
+    }
 }
