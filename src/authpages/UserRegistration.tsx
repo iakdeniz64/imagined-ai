@@ -1,8 +1,9 @@
 import { useEffect, useState } from 'react';
 import { registerUser } from '../CallsToBackend';
 import { useNavigate } from "react-router-dom";
+import Button from '../components/Button';
 
-export default function UserRegistration(){
+export default function UserRegistration() {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
@@ -11,66 +12,68 @@ export default function UserRegistration(){
 
   const handleSubmit = async (event: any) => {
     event.preventDefault();
-
     setError('');
     setSuccess('');
-
     try {
       const response = await registerUser(username, password);
-
       setSuccess(response.message);
       setUsername('');
       setPassword('');
+      // TO DO: If registered, also login and redirect to home! set a 5 sec delay!!!
     } catch (err: any) {
       setError(err);
     }
   };
 
   useEffect(() => {
-      //Redirect back to homepage if logged in
-      if (localStorage.getItem("JWToken")){
-          navigate('/')
-      }
+    if (localStorage.getItem("JWToken")) {
+      navigate('/');
+    }
   }, []);
 
   return (
     <>
+    <div className="max-w-lg mx-auto p-6 rounded-lg">
+      <h2 className="text-2xl font-bold text-center mb-6">Registration</h2>
+      <form onSubmit={handleSubmit} className="space-y-4">
         <div>
-        <h2>Registration</h2>
-        <form onSubmit={handleSubmit}>
-            <div>
-            <label htmlFor="username">Username: </label>
-            <input
-                type="text"
-                id="username"
-                value={username}
-                onChange={(e) => setUsername(e.target.value)}
-                required
-            />
-            </div>
-            <div>
-            <label htmlFor="password">Password: </label>
-            <input
-                type="password"
-                id="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                required
-            />
-            </div>
-            <button type="submit">Register</button>
-        </form>
-
-        {error && <div style={{ color: 'red' }}>{error}</div>}
-        {success && <div style={{ color: 'green' }}>{success}</div>}
+          <label htmlFor="username" className="block font-medium">Username:</label>
+          <input
+            type="text"
+            id="username"
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
+            required
+            className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+          />
         </div>
+        
+        <div>
+          <label htmlFor="password" className="block font-medium">Password:</label>
+          <input
+            type="password"
+            id="password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            required
+            className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+          />
+        </div>
+        
+        <Button
+          destination="#"
+          buttontext="Register"
+          size="default"
+          type='submit'
+        />
+      </form>
 
-        <div className='card'>
-            <h2>
-                <a href='/'>
-                    <button className='buttonHome'>Home!</button>
-                </a>
-            </h2>
+      {error && <div className="mt-4 text-red-600">{error}</div>}
+      {success && <div className="mt-4 text-green-600">{success}</div>}
+    </div>
+
+        <div className="home buttons">
+          <Button destination="/" buttontext="Back to Home"/>
         </div>
     </>
   );
