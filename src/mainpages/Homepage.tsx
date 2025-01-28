@@ -11,7 +11,7 @@ export default function Homepage() {
         if (!localStorage.getItem("JWToken")) {
             localStorage.setItem("JWToken", "")
         } else if (localStorage.getItem("JWToken")){
-            // GET User INfO, add in setUserTExt!
+            // TO DO: (Relevant?) GET User INfO, add in setUserTExt!
             const currentUser = localStorage.getItem("CurrentUser")
             const currentJWT = localStorage.getItem("JWToken")
             getCurrentUserInfo(currentUser, currentJWT).then((element) =>
@@ -22,7 +22,7 @@ export default function Homepage() {
         else(console.log('Error...'))
     }, []);
 
-    // niet goed.. allen alten zien als logged in
+    // TO DO: (Relevant?) niet goed.. allen alten zien als logged in
     const handleLogoutClick = () => {
         localStorage.setItem("JWToken", "")
         localStorage.setItem("CurrentUser", "")
@@ -32,9 +32,9 @@ export default function Homepage() {
     return (
         <>
         <div className='flex flex-col'>
-            <h1 className='flex text-center'>Imagined</h1>
+            <h1 className='flex self-center m-3'>Imagined</h1>
             <Button destination="/contentchoice" buttontext="Start Generating!" size='larger'/>
-            <div className='regloginButtons'>
+            <div className='m-2'>
                 {!localStorage.getItem("JWToken") 
                 ? <div className="selectionButtons">
                     <Button destination="/registration" buttontext="Registration"/>

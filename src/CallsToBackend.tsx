@@ -51,3 +51,16 @@ export async function getCurrentUserInfo(username: string, jwt: string) {
       }
     }
 }
+
+export async function getGeneratedImage(selectionName: string, typeOfContent:string) {
+  try {
+    const response = await axios.post('http://localhost:5000/generate-image', {
+      selectionName,
+      typeOfContent,
+    });
+      return response.data;
+  } catch (error) {
+      console.error("Error fetching image:", error);
+      return { error: "Failed to generate image" };
+  }
+}

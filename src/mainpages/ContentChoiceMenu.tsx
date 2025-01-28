@@ -1,10 +1,8 @@
-import { useState } from "react";
 import ChoiceDisplay from "../components/ChoiceDisplay";
 import './styles/ContentChoiceMenu.css'
+import Button from "../components/Button";
 
 export default function ContentChoiceMenu() {
-    const [userChoice, setUserChoice] = useState('');
-    // Get data here, assuming a json with keys: 
     
     const jsonList = [
         {
@@ -140,13 +138,15 @@ export default function ContentChoiceMenu() {
             />
         )
     })
-    // console.log(itemsOrganizedList)
-    // Dan, for each item in json list, roep NIEUWE FUNCTIE aan die ze netjes laat zien.
+
     return (
         <>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                 {itemsOrganizedList}
+            </div>
+            <div className="home buttons">
+                <Button destination="/" buttontext="Back to Home"/>
             </div>
         </>
     )

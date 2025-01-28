@@ -4,10 +4,10 @@ import './styles/ChoiceDisplay.css'
 export default function ChoiceDisplay({id, name, type, year, image, isClickable = true}: { id: number; name: string; type: string; year: number; image: string; isClickable?: boolean }) {
 
     const navigate = useNavigate();
-
     const choiceClickHandler = () => {
         navigate(`/contentchoice/${id}`, {state: {id, name, type, year, image}})
     }
+    
     return (
         <div
         className={`p-4 rounded shadow border border-gray-300 max-w-xs mx-auto transition-all duration-300 hover:shadow-lg ${

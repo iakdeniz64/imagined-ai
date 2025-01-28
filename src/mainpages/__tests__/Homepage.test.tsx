@@ -2,6 +2,8 @@
  * @vitest-environment jsdom
  */
 
+// TO DO: Make new tests, hold this and movies, for reference on how to use.
+
 import { expect, test } from 'vitest'
 import {render, screen, } from '@testing-library/react'
 import Homepage from "../Homepage"

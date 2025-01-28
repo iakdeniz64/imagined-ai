@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { loginUser } from '../CallsToBackend';
 import { useNavigate } from "react-router-dom";
+import Button from '../components/Button';
 
 export default function UserLogin(){
   const [username, setUsername] = useState('');
@@ -20,7 +21,6 @@ export default function UserLogin(){
 
       setSuccess(response.message);
       localStorage.setItem("JWToken", response.token)
-      // test line hieronder om username in localstorage te zetten
       localStorage.setItem("CurrentUser", username)
       setUsername('');
       setPassword('');
@@ -31,7 +31,6 @@ export default function UserLogin(){
   };
 
   useEffect(() => {
-    //Redirect back to homepage if logged in
     if (localStorage.getItem("JWToken")){
         navigate('/')
     }
@@ -69,12 +68,8 @@ export default function UserLogin(){
         {success && <div style={{ color: 'green' }}>{success}</div>}
         </div>
 
-        <div className='card'>
-            <h2>
-                <a href='/'>
-                    <button className='buttonHome'>Home!</button>
-                </a>
-            </h2>
+        <div className="home buttons">
+          <Button destination="/" buttontext="Back to Home"/>
         </div>
     </>
   );
