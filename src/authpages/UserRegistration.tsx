@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { registerUser } from '../CallsToBackend';
+import { registerUser, loginUser } from '../CallsToBackend';
 import { useNavigate } from "react-router-dom";
 import Button from '../components/Button';
 
@@ -17,9 +17,15 @@ export default function UserRegistration() {
     try {
       const response = await registerUser(username, password);
       setSuccess(response.message);
+
+      const loginresponse = await loginUser(username, password);
+      setSuccess(loginresponse.message);
+      localStorage.setItem("JWToken", loginresponse.token)
+      localStorage.setItem("CurrentUser", username)
+
       setUsername('');
       setPassword('');
-      // TO DO: If registered, also login and redirect to home! set a 5 sec delay!!!
+      navigate('/')
     } catch (err: any) {
       setError(err);
     }

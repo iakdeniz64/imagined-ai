@@ -1,11 +1,13 @@
 import { useState, useEffect } from 'react'
+import { useNavigate } from "react-router-dom";
 import './styles/Homepage.css'
 import Button from '../components/Button';
 import { getCurrentUserInfo } from '../CallsToBackend'
 
 export default function Homepage() {
     const [userText, setUserText] = useState('');
-    const [userInfo, setUserInfo] = useState('');
+    const [userInfo, setUserInfo] = useState({ myusername: '', myurls: [] }); //.myusername = string, .myurls = array
+    const navigate = useNavigate();
 
     useEffect(() => {
         if (!localStorage.getItem("JWToken")) {
@@ -15,7 +17,7 @@ export default function Homepage() {
             const currentUser = localStorage.getItem("CurrentUser")
             const currentJWT = localStorage.getItem("JWToken")
             getCurrentUserInfo(currentUser, currentJWT).then((element) =>
-                setUserInfo(element) //myusername = string, myurls = array
+                setUserInfo(element)
             )
             setUserText('You are logged in, ')
         }
@@ -27,23 +29,32 @@ export default function Homepage() {
         localStorage.setItem("JWToken", "")
         localStorage.setItem("CurrentUser", "")
         setUserText('')
+        setUserInfo({ myusername: '', myurls: [] })
     }
+    
+    const handleCollectionClick = () => {
+        localStorage.setItem('userUrls', JSON.stringify(userInfo.myurls));
+        navigate('/collection')
+    };
 
     return (
         <>
         <div className='flex flex-col'>
             <h1 className='flex self-center m-3'>Imagined</h1>
-            <Button destination="/contentchoice" buttontext="Start Generating!" size='larger'/>
             <div className='m-2'>
                 {!localStorage.getItem("JWToken") 
                 ? <div className="selectionButtons">
-                    <Button destination="/registration" buttontext="Registration"/>
-                    <Button destination="/login" buttontext="Login"/>
+                    <Button destination="/registration" buttontext="Registration" size='larger'/>
+                    <Button destination="/login" buttontext="Login" size='larger' />
                 </div>
-                : <div className='loggedInUser'>
-                {`${userText} ${userInfo.myusername}. `}
-                <button onClick={handleLogoutClick}>Log Out</button>
+                : <div className='flex flex-col m-1'>
+                    <Button destination="/contentchoice" buttontext="Start Generating" size='larger'/>
+                    <Button destination="#" buttontext="Check Collection" onClickFunction={handleCollectionClick}/>
+                    {`${userText} ${userInfo.myusername}.`}
+                    <Button destination='#' buttontext='Log Out' onClickFunction={handleLogoutClick}/>
                 </div>}
+                
+                
             </div>
         </div>
 
