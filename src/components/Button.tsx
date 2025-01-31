@@ -39,7 +39,7 @@ export default function Button({
       type={type}
       onClick={onClickButtonHandler}
       style={{ fontSize: `${fontSize}em` }}
-      className={`ml-1 mr-1 border-none ${
+      className={`m-2 border-none ${
         size === "smaller"
           ? "text-sm"
           : size === "larger"

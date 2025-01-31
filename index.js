@@ -5,6 +5,7 @@ import jwt from 'jsonwebtoken'
 import pg from 'pg';
 import cors from 'cors';
 import OpenAI from 'openai';
+import imgbbUploader from 'imgbb-uploader'
 
 
 dotenv.config();
@@ -111,22 +112,65 @@ app.post('/login', async (req, res) => {
 });
 
 app.post('/add-url', verifyToken, async (req, res) => {
-    const { url } = req.body;
-  
-    if (!url || !/^https?:\/\/[^\s]+$/.test(url)) {
+  const { url } = req.body;
+  const { username } = req.user; // Get the username from the decoded JWT payload
+
+  // Validate the URL format
+  if (!url || !/^https?:\/\/[^\s]+$/.test(url)) {
       return res.status(400).json({ message: 'Invalid URL' });
-    }
-  
-    const result = await pool.query(
-      'UPDATE users SET urls = array_append(urls, $1) WHERE id = $2 RETURNING urls',
-      [url, req.user.userId]
-    );
-  
+  }
+
+  try {
+      const result = await pool.query(
+          'UPDATE users SET urls = array_append(urls, $1) WHERE username = $2 RETURNING urls',
+          [url, username]
+      );
+
+      if (result.rowCount === 0) {
+          return res.status(404).json({ message: 'User not found' });
+      }
+
+      res.json({
+          message: 'URL added successfully',
+          urls: result.rows[0].urls,
+      });
+  } catch (error) {
+      console.error("Error adding URL:", error);
+      res.status(500).json({ message: 'Server error' });
+  }
+});
+
+  //add also del-url
+
+
+app.post('/upload', verifyToken, async(req, res) => {
+  const { imageUrl } = req.body
+  console.log(imageUrl, "printing imageurl from index.js")
+
+
+  if (!imageUrl){
+    return res.status(400).send('No image URL provided.')
+  }
+
+  const apiKey = process.env.IMG_BB_API_KEY;
+  console.log(imageUrl, "Printing imageUrl from within index.js")
+
+  imgbbUploader({
+    apiKey: apiKey, 
+    imageUrl: imageUrl})
+  .then((response) => {
     res.json({
-      message: 'URL added successfully',
-      urls: result.rows[0].urls,
-    });
-  });
+      success: true,
+      message: 'Image uploaded successfully',
+      data: response,
+    })
+  })
+  .catch((error) => {
+    console.error('Image upload failed:', error);
+    res.status(500).send('Image upload failed');
+  })
+})
+
 
 app.get('/my-data', verifyToken, async (req, res) => {
     const result = await pool.query(
