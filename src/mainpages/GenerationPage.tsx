@@ -5,6 +5,7 @@ import { useState } from "react";
 import Button from "../components/Button";
 import axios from "axios";
 import { BeatLoader } from 'react-spinners'
+import JsFileDownloader from "js-file-downloader";
 
 export default function GenerationPage() {
 
@@ -19,7 +20,7 @@ export default function GenerationPage() {
 
     const handleImageHandler = async (e) => {
         setCopyText('Copy (2h)');
-        setSaveText('Save')
+        setSaveText('Add to Collection')
         try {
             setIsLoading(true);
             e.preventDefault();
@@ -54,6 +55,7 @@ export default function GenerationPage() {
         const currentJWT = localStorage.getItem("JWToken");
       
         // TO DO: Save button becomes disabled upon saving is complete.
+        // TO DO: ALSO make check collection button disabled until saving complete
 
         if (!currentJWT) {
             return;  // Handle redirection or login logic as needed
@@ -104,8 +106,9 @@ export default function GenerationPage() {
         }
     };
 
-    const handleDownload = async () => {
-        setDownloadText('Downloaded')
+    const handleDownload = (url: string) => {
+        new JsFileDownloader({url: url});
+        // Not working
     }
 
     return (
@@ -137,7 +140,7 @@ export default function GenerationPage() {
                             <h2 className="text-2xl font-bold text-center mb-2">Generated Picture</h2>
                                 <Button destination="#" buttontext={copyText} onClickFunction={handleCopyToClipboard} size="smaller"/>
                                 <Button destination="#" buttontext={saveText} onClickFunction={handleSaveToCollection} size="smaller"/>
-                                <Button destination="#" buttontext={downloadText} onClickFunction={handleDownload} size="smaller"/>
+                                <Button destination="#" buttontext='Download' onClickFunction={() => handleDownload(generatedImage)} size="smaller"/>
                             <img src={generatedImage} alt="" className="object-cover rounded w-full h-60 m-3" />
                             <div className="m-1 font-bold text-center">{generatingText}</div>
                         </div>

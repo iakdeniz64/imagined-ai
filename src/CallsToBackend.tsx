@@ -101,4 +101,20 @@ export async function addImageUrl(url: string, jwt: string) {
   }
 }
 
-// add del, only delete from arrays list. cant use api to delete from imgbb.
+export async function removeImageUrl(url: string, jwt: string) {
+  try {
+    const response = await axios.post(
+      'http://localhost:5000/remove-url', // URL of your API
+      { url }, // Send the URL in the request body
+      {
+        headers: {
+          Authorization: `Bearer ${jwt}`, // JWT in the Authorization header
+        }
+      }
+    );
+    return response.data;
+  } catch (error) {
+    console.error("Error removing image:", error);
+    return { error: "Failed to remove image" };
+  }
+}

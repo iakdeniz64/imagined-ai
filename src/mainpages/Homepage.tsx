@@ -28,6 +28,8 @@ export default function Homepage() {
     const handleLogoutClick = () => {
         localStorage.setItem("JWToken", "")
         localStorage.setItem("CurrentUser", "")
+        localStorage.setItem("movieChoice", "")
+        localStorage.setItem("userUrls", "")
         setUserText('')
         setUserInfo({ myusername: '', myurls: [] })
     }
