@@ -20,6 +20,7 @@
     "express": "^4.21.2",
     "imgbb-uploader": "^1.5.1",
     "jest-environment-jsdom": "^29.7.0",
+    "js-file-downloader": "^1.1.25",
     "jsonwebtoken": "^9.0.2",
     "node": "^22.13.0",
     "openai": "^4.78.1",

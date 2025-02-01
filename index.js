@@ -142,6 +142,37 @@ app.post('/add-url', verifyToken, async (req, res) => {
 
   //add also del-url
 
+app.post('/remove-url', verifyToken, async(req, res) => {
+  const { url } = req.body;
+  const { username } = req.user;
+
+  // Validate the URL format
+  if (!url || !/^https?:\/\/[^\s]+$/.test(url)) {
+    return res.status(400).json({ message: 'Invalid URL' });
+  }
+
+  try {
+    const result = await pool.query(
+        'UPDATE users SET urls = array_remove(urls, $1) WHERE username = $2 RETURNING urls',
+        [url, username]
+    );
+
+    if (result.rowCount === 0) {
+        return res.status(404).json({ message: 'User not found' });
+    }
+    // TO DO: Add a check if url is already in urls list!
+
+    res.json({
+        message: 'URL removed successfully',
+        urls: result.rows[0].urls,
+    });
+  } catch (error) {
+      console.error("Error removing URL:", error);
+      res.status(500).json({ message: 'Server error' });
+  }
+
+})
+
 
 app.post('/upload', verifyToken, async(req, res) => {
   const { imageUrl } = req.body
