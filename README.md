@@ -7,7 +7,7 @@ A project where the use of OpenAI was the core objective.
 - The user can either copy the url from Dall-E (valid for 2 hours), or add it to the collection.
 - From the collection, the user can copy a permanent URL, download the picture to their device, or delete it from their collection.
 
-The project is created as a Vite-React project, using TypeScript. For CSS Styling, TailwindCSS is used. As a database, Neon is used as an online database, on the free tier. The images are uploaded to ImgBB.com, after being obtained from Dall-E.
+The project is created as a Vite-React project, using TypeScript. For CSS Styling, TailwindCSS is used. As a database, Neon is used as an online Database, on the free tier. The images are uploaded to ImgBB.com, after being obtained from Dall-E.
 
 ## Prerequisites
 - Node.js 22.13.0, or higher
