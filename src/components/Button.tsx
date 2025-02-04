@@ -8,12 +8,14 @@ export default function Button({
   size = "default",
   onClickFunction,
   type = "button",
+  disabled = false,
 }: {
   destination: string;
   buttontext: string;
   size?: "smaller" | "default" | "larger";
   onClickFunction?: () => void;
   type?: "button" | "submit" | "reset";
+  disabled?: false | true;
 }) {
   const navigate = useNavigate();
   const [fontSize, setFontSize] = useState(1);
@@ -39,13 +41,15 @@ export default function Button({
       type={type}
       onClick={onClickButtonHandler}
       style={{ fontSize: `${fontSize}em` }}
-      className={`m-2 border-none ${
+      disabled={disabled}
+      className={`m-2 border-none disabled:text-gray-500 ${
         size === "smaller"
           ? "text-sm"
           : size === "larger"
           ? "text-xl"
           : "text-base"
-      } `}
+      } `
+      }
     >
       {buttontext}
     </button>

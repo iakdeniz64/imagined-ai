@@ -13,7 +13,6 @@ export default function Homepage() {
         if (!localStorage.getItem("JWToken")) {
             localStorage.setItem("JWToken", "")
         } else if (localStorage.getItem("JWToken")){
-            // TO DO: (Relevant?) GET User INfO, add in setUserTExt!
             const currentUser = localStorage.getItem("CurrentUser")
             const currentJWT = localStorage.getItem("JWToken")
             getCurrentUserInfo(currentUser, currentJWT).then((element) =>
@@ -24,7 +23,6 @@ export default function Homepage() {
         else(console.log('Error...'))
     }, []);
 
-    // TO DO: (Relevant?) niet goed.. allen alten zien als logged in
     const handleLogoutClick = () => {
         localStorage.setItem("JWToken", "")
         localStorage.setItem("CurrentUser", "")
@@ -55,11 +53,8 @@ export default function Homepage() {
                     {`${userText} ${userInfo.myusername}.`}
                     <Button destination='#' buttontext='Log Out' onClickFunction={handleLogoutClick}/>
                 </div>}
-                
-                
             </div>
         </div>
-
         </>
     )
 }

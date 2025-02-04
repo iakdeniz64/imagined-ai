@@ -17,12 +17,10 @@ export default function UserRegistration() {
     try {
       const response = await registerUser(username, password);
       setSuccess(response.message);
-
       const loginresponse = await loginUser(username, password);
       setSuccess(loginresponse.message);
       localStorage.setItem("JWToken", loginresponse.token)
       localStorage.setItem("CurrentUser", username)
-
       setUsername('');
       setPassword('');
       navigate('/')
@@ -69,7 +67,6 @@ export default function UserRegistration() {
         <Button
           destination="#"
           buttontext="Register"
-          size="default"
           type='submit'
         />
       </form>
@@ -77,10 +74,7 @@ export default function UserRegistration() {
       {error && <div className="mt-4 text-red-600">{error}</div>}
       {success && <div className="mt-4 text-green-600">{success}</div>}
     </div>
-
-        <div className="home buttons">
-          <Button destination="/" buttontext="Back to Home"/>
-        </div>
+      <Button destination="/" buttontext="Back to Home"/>
     </>
   );
 };
