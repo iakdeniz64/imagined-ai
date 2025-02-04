@@ -1,33 +1,60 @@
-import './Homepage.css'
+import { useState, useEffect } from 'react'
+import { useNavigate } from "react-router-dom";
+import './styles/Homepage.css'
+import Button from '../components/Button';
+import { getCurrentUserInfo } from '../CallsToBackend'
 
 export default function Homepage() {
-    localStorage.setItem("movieChoice", "")
+    const [userText, setUserText] = useState('');
+    const [userInfo, setUserInfo] = useState({ myusername: '', myurls: [] }); //.myusername = string, .myurls = array
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        if (!localStorage.getItem("JWToken")) {
+            localStorage.setItem("JWToken", "")
+        } else if (localStorage.getItem("JWToken")){
+            const currentUser = localStorage.getItem("CurrentUser")
+            const currentJWT = localStorage.getItem("JWToken")
+            getCurrentUserInfo(currentUser, currentJWT).then((element) =>
+                setUserInfo(element)
+            )
+            setUserText('You are logged in, ')
+        }
+        else(console.log('Error...'))
+    }, []);
+
+    const handleLogoutClick = () => {
+        localStorage.setItem("JWToken", "")
+        localStorage.setItem("CurrentUser", "")
+        localStorage.setItem("movieChoice", "")
+        localStorage.setItem("userUrls", "")
+        setUserText('')
+        setUserInfo({ myusername: '', myurls: [] })
+    }
+    
+    const handleCollectionClick = () => {
+        localStorage.setItem('userUrls', JSON.stringify(userInfo.myurls));
+        navigate('/collection')
+    };
+
     return (
         <>
-        <h1 className='mainTitle'>Imagined</h1>
-            <div className="selectionButtons">
-                <div className='card'>
-                    <h2>
-                        <a href='/movies'>
-                            <button className='buttonMovies'>Movies</button>
-                        </a>
-                    </h2>
+        <div className='flex flex-col'>
+            <h1 className='flex self-center m-3'>Imagined</h1>
+            <div className='m-2'>
+                {!localStorage.getItem("JWToken") 
+                ? <div className="selectionButtons">
+                    <Button destination="/registration" buttontext="Registration" size='larger'/>
+                    <Button destination="/login" buttontext="Login" size='larger' />
                 </div>
-                <div className='card'>
-                    <h2>
-                        <a href='/tvshows'>
-                            <button className='buttonTvShows'>TV Shows</button>
-                        </a>
-                    </h2>
-                </div>
-                <div className='card'>
-                    <h2>
-                        <a href='/anime'>
-                            <button className='buttonAnime'>Anime</button>
-                        </a>
-                    </h2>
-                </div>
+                : <div className='flex flex-col m-1'>
+                    <Button destination="/contentchoice" buttontext="Start Generating" size='larger'/>
+                    <Button destination="#" buttontext="Check Collection" onClickFunction={handleCollectionClick}/>
+                    {`${userText} ${userInfo.myusername}.`}
+                    <Button destination='#' buttontext='Log Out' onClickFunction={handleLogoutClick}/>
+                </div>}
             </div>
+        </div>
         </>
     )
 }
