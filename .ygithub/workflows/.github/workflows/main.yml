@@ -1,0 +1,33 @@
+name: Fullstack CI
+
+on: [push, pull_request]
+
+jobs:
+  fullstack:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
+      - name: Set Up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+
+      - name: Create .env File
+        run: |
+          echo "PORT=5000" >> .env
+          echo "DB_CONNECTION_STRING=${{ secrets.DB_CONNECTION_STRING }}" >> .env
+          echo "JWT_SECRET=${{ secrets.JWT_SECRET }}" >> .env
+          echo "OPENAI_API_KEY=${{ secrets.OPENAI_API_KEY }}" >> .env
+          echo "IMG_BB_API_KEY=${{ secrets.IMG_BB_API_KEY }}" >> .env
+
+      - name: Install Dependencies
+        run: npm install
+
+      - name: Start Server
+        run: npm start &  # Run in background
+
+      - name: Wait for Server to Start
+        run: sleep 10  # Give it time to boot up
