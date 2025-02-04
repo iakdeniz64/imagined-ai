@@ -16,7 +16,7 @@ The project is created as a Vite-React project, using TypeScript. For CSS Stylin
 ## Installation
 1. Clone the repository
 2. Run 'npm install' command, from within the IDE or from a command terminal within the root folder
-3. Create an .env folder in the root folder (next to this README file)
+3. Create an .env file in the root folder (next to this README file)
 - Your desired Node Server Port (5000 is preferred, if you use another, change it in index.js. PORT=YOUR_PORT_NUMBER)
 - Your Database Connection String (Database Scheme is in usedScheme.txt, next to this README file. DB_CONNECTION_STRING=YOUR_DB_STRING)
 - Your OpenAI API Key (OPENAI_API_KEY=YOUR_OPENAI_API_KEY)
