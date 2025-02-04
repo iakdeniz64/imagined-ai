@@ -73,10 +73,7 @@ export default function UserLogin(){
          {error && <div className="mt-4 text-red-600">{error}</div>}
          {success && <div className="mt-4 text-green-600">{success}</div>}
        </div>
-   
-           <div className="home buttons">
-             <Button destination="/" buttontext="Back to Home"/>
-           </div>
+        <Button destination="/" buttontext="Back to Home"/>
        </>
   );
 };

@@ -160,7 +160,6 @@ app.post('/remove-url', verifyToken, async(req, res) => {
     if (result.rowCount === 0) {
         return res.status(404).json({ message: 'User not found' });
     }
-    // TO DO: Add a check if url is already in urls list!
 
     res.json({
         message: 'URL removed successfully',

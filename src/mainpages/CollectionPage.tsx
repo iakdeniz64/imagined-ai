@@ -6,31 +6,21 @@ import JsFileDownloader from 'js-file-downloader';
 
 export default function CollectionPage() {
     const [userInfo, setUserInfo] = useState({ myusername: '', myurls: [] }); //.myusername = string, .myurls = array
-    const [copyText, setCopyText]= useState('Copy URL')
     const currentUser = localStorage.getItem("CurrentUser")
     const currentJWT = localStorage.getItem("JWToken")
     const navigate = useNavigate();
 
     useEffect(() => {
-        const currentUser = localStorage.getItem("CurrentUser")
-        const currentJWT = localStorage.getItem("JWToken")
-
-        if (currentJWT == '' || currentUser == '') {
+        if ((localStorage.getItem("JWToken")) == '' || (localStorage.getItem("CurrentUser")) == '') {
             navigate('/')
 
         } else {
-            getCurrentUserInfo(currentUser, currentJWT).
+            getCurrentUserInfo((localStorage.getItem("CurrentUser")), (localStorage.getItem("JWToken"))).
             then((element) =>
                 setUserInfo(element)
             )
         }
     }, []);
-    console.log(userInfo)
-
-    // TO DO: In the use effect here, get data based on jwt
-
-    //copy url button, en download picture button. EN REMOVE FUNCT.
-    //  functies here.
 
     const handleCopyToClipboard = (toCopyImage: string) => {
         navigator.clipboard.writeText(toCopyImage)
@@ -44,27 +34,21 @@ export default function CollectionPage() {
     }
 
     const handleRemoveImage = async (url: string) => {
-        // TO DO:
         if (currentJWT !== ''){
             try {
                 const renewedList = await removeImageUrl(url, currentJWT).then((element) => {
                     return {
                         myusername: currentUser,
-                        myurls: element.urls, // Assuming element.urls is the new list
+                        myurls: element.urls,
                     };
                 });
     
-                // Update state with the new user info
                 setUserInfo(renewedList);
             } catch (error) {
                 console.error('Error removing image:', error);
             }
         }
-
     }
-
-    // TO DO: Dynamic BUTTONTEXT, just like generationpage
-    // TO DO: Try to reuse stuff, instead of implementing it differently each time.
 
     return (
         <div>
@@ -91,14 +75,11 @@ export default function CollectionPage() {
                 </>
             ) : (
                 <div>
-                    "No pictures added yet!"
+                    <h2 className="font-bold m-2"> No pictures added yet! </h2>
                     <Button destination="/contentchoice" buttontext="Start Generating" size='larger'/>
                 </div>
             )}
-            <div className="home buttons">
-                <Button destination="/" buttontext="Back to Home" />
-            </div>
+                <Button destination="/" buttontext="Back to Home" size="larger" />
         </div>
     );
 }
-    // TO DO: Remove home buttons from className!

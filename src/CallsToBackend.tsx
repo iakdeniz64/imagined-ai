@@ -86,11 +86,11 @@ export async function uploadImageToBB(imageUrl: string, jwt: string) {
 export async function addImageUrl(url: string, jwt: string) {
   try {
     const response = await axios.post(
-      'http://localhost:5000/add-url', // URL of your API
-      { url }, // Send the URL in the request body
+      'http://localhost:5000/add-url',
+      { url },
       {
         headers: {
-          Authorization: `Bearer ${jwt}`, // JWT in the Authorization header
+          Authorization: `Bearer ${jwt}`,
         }
       }
     );
@@ -104,11 +104,11 @@ export async function addImageUrl(url: string, jwt: string) {
 export async function removeImageUrl(url: string, jwt: string) {
   try {
     const response = await axios.post(
-      'http://localhost:5000/remove-url', // URL of your API
-      { url }, // Send the URL in the request body
+      'http://localhost:5000/remove-url',
+      { url },
       {
         headers: {
-          Authorization: `Bearer ${jwt}`, // JWT in the Authorization header
+          Authorization: `Bearer ${jwt}`,
         }
       }
     );

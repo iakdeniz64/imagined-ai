@@ -1,11 +1,9 @@
 import { useLocation } from "react-router-dom";
 import ChoiceDisplay from "../components/ChoiceDisplay";
-import { addImageUrl, getGeneratedImage, uploadImageToBB } from "../CallsToBackend";
+import { addImageUrl, getCurrentUserInfo, getGeneratedImage, uploadImageToBB } from "../CallsToBackend";
 import { useState } from "react";
 import Button from "../components/Button";
-import axios from "axios";
 import { BeatLoader } from 'react-spinners'
-import JsFileDownloader from "js-file-downloader";
 
 export default function GenerationPage() {
 
@@ -13,10 +11,10 @@ export default function GenerationPage() {
     const { id, name, type, year, image } = location.state || {};
     const [generatedImage, setGeneratedImage] = useState('');
     const [loading, setIsLoading] = useState(false); // true = testing, false = intended!
-    const [copyText, setCopyText]= useState('Copy (2h)')
-    const [saveText, setSaveText]= useState('Add to Collection')
-    const [downloadText, setDownloadText] = useState('Download')
-    const [generatingText, setGeneratingText] = useState('Generating')
+    const [saveLoading, setSaveLoading] = useState(false); // true = testing, false = intended!
+    const [copyText, setCopyText]= useState('Copy (2h)');
+    const [saveText, setSaveText]= useState('Add to Collection');
+    const [generatingText, setGeneratingText] = useState('Generating');
 
     const handleImageHandler = async (e) => {
         setCopyText('Copy (2h)');
@@ -53,63 +51,52 @@ export default function GenerationPage() {
 
       const handleSaveToCollection = async () => {
         const currentJWT = localStorage.getItem("JWToken");
-      
-        // TO DO: Save button becomes disabled upon saving is complete.
-        // TO DO: ALSO make check collection button disabled until saving complete
+        const currentUser = localStorage.getItem("CurrentUser");
+        setSaveLoading(true);
 
         if (!currentJWT) {
-            return;  // Handle redirection or login logic as needed
+            return;
         }
       
         try {
-            // TO DO: Use getCurrentUserInfo instead!
-
-            // First, fetch the user's current collection (URLs)
-            const userResponse = await axios.get('http://localhost:5000/my-data', {
-                headers: {
-                    Authorization: `Bearer ${currentJWT}`,
-                }
-            });
-      
-            // If the URLs are fetched successfully, check for the existing URL
-            const existingUrls = userResponse.data.myurls || [];
-      
-            if (existingUrls.includes(generatedImage)) {
-                // URL already exists, handle this case (show message, do nothing, etc.)
-                console.log("This URL is already in your collection.");
-                setGeneratingText("This URL is already in your collection.");
-                return;
-            }
-      
-            // URL doesn't exist, proceed to add it
             const uploadImg = await uploadImageToBB(generatedImage, currentJWT);
             if (uploadImg.error) {
                 console.log("Failed to upload to collection:", uploadImg.error);
                 setGeneratingText("Failed to upload to collection");
+                setSaveLoading(false);
             } else {
                 console.log("Uploaded successfully:", uploadImg);
                 setGeneratingText("Uploaded successfully");
+                setSaveLoading(false);
             }
 
-            const response = await addImageUrl(uploadImg.data.image.url, currentJWT); // Only pass the generated image and JWT
+            const userResponse = await getCurrentUserInfo(currentUser, currentJWT)
+            const existingUrls = userResponse.myurls || [];
+      
+            if (existingUrls.includes(uploadImg.data.image.url)) {
+                console.log("This URL is already in your collection.");
+                setGeneratingText("This URL is already in your collection.");
+                setSaveLoading(false);
+                return;
+            }
+
+            const response = await addImageUrl(uploadImg.data.image.url, currentJWT);
       
             if (response.error) {
                 console.log("Failed to save URL to collection:", response.error);
                 setGeneratingText("Failed to save URL to collection");
+                setSaveLoading(false);
             } else {
                 console.log("URL added successfully:", response.urls);
                 setGeneratingText("URL added successfully");
+                setSaveLoading(false);
             }
         } catch (error) {
             console.error("Error saving to collection:", error);
             setGeneratingText("Error saving to collection");
+            setSaveLoading(false);
         }
     };
-
-    const handleDownload = (url: string) => {
-        new JsFileDownloader({url: url});
-        // Not working
-    }
 
     return (
         <>
@@ -122,11 +109,9 @@ export default function GenerationPage() {
                 image={image}
                 isClickable={false}
             />
-
             <div className='m-2'>
-                <button onClick={handleImageHandler} className='changePicture'>Get a generated picture based on your choice!</button>
+                <button onClick={handleImageHandler} className='m-2'>Get a generated picture based on your choice!</button>
             </div>
-
                 {loading ? (
                     <div className={`p-4 rounded shadow border border-gray-300 max-w-xs mx-auto transition-all duration-300 hover:shadow-lg`}>
                         <h2 className="text-2xl font-bold text-center mb-6">Generating Picture</h2>
@@ -137,27 +122,22 @@ export default function GenerationPage() {
                         {generatedImage && (
                         <div className={`justify-items-center items-center p-3 m-2 rounded shadow border border-gray-300 max-w-xl mx-auto transition-all duration-300`} 
                             style={{ width: '450px', height: '420px' }}>
-                            <h2 className="text-2xl font-bold text-center mb-2">Generated Picture</h2>
-                                <Button destination="#" buttontext={copyText} onClickFunction={handleCopyToClipboard} size="smaller"/>
-                                <Button destination="#" buttontext={saveText} onClickFunction={handleSaveToCollection} size="smaller"/>
-                                <Button destination="#" buttontext='Download' onClickFunction={() => handleDownload(generatedImage)} size="smaller"/>
+                            <h2 className="text-2xl font-bold text-center mb-3">Generated Picture</h2>
+                                <Button destination="#" buttontext={copyText} onClickFunction={handleCopyToClipboard} size="larger" disabled={saveLoading}/>
+                                <Button destination="#" buttontext={saveText} onClickFunction={handleSaveToCollection} size="larger" disabled={saveLoading}/>
                             <img src={generatedImage} alt="" className="object-cover rounded w-full h-60 m-3" />
-                            <div className="m-1 font-bold text-center">{generatingText}</div>
+                            { saveLoading
+                            ? <BeatLoader color="#ffffff" />
+                            : <div className="m-1 font-bold text-center">{generatingText}</div>}
                         </div>
                         )} 
                     </>
                 )}
-            <div className="home buttons">
-                <Button destination="/contentchoice" buttontext="Back To Choices"/>
-                <Button destination="/collection" buttontext="Check Collection"/>
-                <Button destination="/" buttontext="Back to Home"/>
+            <div className="m-2">
+                <Button destination="/contentchoice" buttontext="Back To Choices" disabled={saveLoading}/>
+                <Button destination="/collection" buttontext="Check Collection" disabled={saveLoading}/>
+                <Button destination="/" buttontext="Back to Home" disabled={saveLoading}/>
             </div>
         </>
     )
-    
-    // TO DO: 
-    //daarna, add copy url, en save url to collection.
-    //hierna komt nog url pagina, waar alle urls te zien zijn (met crud), en dan add fotos
-    //daarna finish project nadat mobiel er ook goed uitziet.
-    // GENERATE IMAGE MOET OOK JWT VRAGEN
 }
