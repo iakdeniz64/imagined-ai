@@ -1,5 +1,4 @@
-Project Imagined.
-
+## Project Imagined
 A project where the use of OpenAI was the core objective.
 
 A user can register, and login.
