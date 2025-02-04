@@ -16,7 +16,7 @@ The project is created as a Vite-React project. For CSS Styling, TailwindCSS is 
 
 ## Installation
 1. Clone the repository
-2. NPM Install, from within the IDE or from a command terminal within the root folder
+2. Run 'npm install' command, from within the IDE or from a command terminal within the root folder
 3. Create an .env folder in the root folder (next to this README file)
 - Your desired Node Server Port (PORT=YOUR_PORT_NUMBER)
 - Your Database Connection String (Database Scheme is in usedScheme.txt, next to this README file. DB_CONNECTION_STRING=YOUR_DB_STRING)
@@ -24,4 +24,4 @@ The project is created as a Vite-React project. For CSS Styling, TailwindCSS is 
 - Your JWT Secret (a generator from e.g. LastPass is recommended. JWT_SECRET=YOUR_SECRET)
 - Your ImgBB API Key (IMG_BB_API_KEY=YOUR_IMGBB_API_KEY)
 4. Run 'node index.js' command, from a command terminal within the root folder
-5. NPM Run Dev, from within the IDE or from a command terminal within the root folder
+5. Run 'npm run dev' command, from within the IDE or from a command terminal within the root folder
