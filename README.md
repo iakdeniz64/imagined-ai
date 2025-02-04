@@ -9,3 +9,16 @@ The user can then either copy the url from Dall-E (which is valid for 2 hours), 
 From their collection, the user can copy a permanent URL, download the picture to their device, or delete it from their collection.
 
 The project is created as a Vite-React project. For CSS Styling, TailwindCSS is used. As a database, Neon is used as an online database, on the free tier. The images are uploaded to ImgBB.com, after being obtained from Dall-E.
+
+
+## Prerequisites
+- Node.js 22.13.0, or higher
+- React 18.3.1, or higher
+
+## Installation
+1. Clone the repository
+2. NPM Install, from within the IDE or from a command terminal within the root folder
+3. Run 'node index.js' command, from a command terminal within the root folder
+4. Create an .env folder in the root folder (next to this README)
+5. Fill your desired Node Server Port, your own Database Connection String, your own OpenAI API Key, your own JWT Secret (a generator from e.g. LastPass is recommended), your own ImgBB API Key.
+6. NPM Run Dev, from within the IDE or from a command terminal within the root folder
