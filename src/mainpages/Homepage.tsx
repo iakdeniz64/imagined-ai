@@ -15,10 +15,12 @@ export default function Homepage() {
         } else if (localStorage.getItem("JWToken")){
             const currentUser = localStorage.getItem("CurrentUser")
             const currentJWT = localStorage.getItem("JWToken")
-            getCurrentUserInfo(currentUser, currentJWT).then((element) =>
-                setUserInfo(element)
-            )
-            setUserText('You are logged in, ')
+            if (currentJWT && currentUser){
+                getCurrentUserInfo(currentUser, currentJWT).then((element) =>
+                    setUserInfo(element)
+                )
+                setUserText('You are logged in, ')
+            }
         }
         else(console.log('Error...'))
     }, []);

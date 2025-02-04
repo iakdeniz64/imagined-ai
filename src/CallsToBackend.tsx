@@ -7,13 +7,12 @@ export async function registerUser(username: string, password: string) {
             password,
           });
           return response.data;
-    } catch (error: any) {
-        if (error.response) {
-          throw error.response.data.message;
-        } else {
-          throw 'An error occurred. Please try again later.';
-        }
+    } catch (error: unknown) {
+      if (axios.isAxiosError(error)) {
+          throw error.response?.data?.message || "An unexpected error occurred.";
       }
+      throw "An error occurred. Please try again later.";
+  }
 }
 
 export async function loginUser(username: string, password: string) {
@@ -23,13 +22,12 @@ export async function loginUser(username: string, password: string) {
       password,
     });
     return response.data;
-  } catch (error: any) {
-    if (error.response) {
-      throw error.response.data.message;
-    } else {
-      throw 'An error occurred. Please try again later.';
+  } catch (error: unknown) {
+    if (axios.isAxiosError(error)) {
+        throw error.response?.data?.message || "An unexpected error occurred.";
     }
-  }
+    throw "An error occurred. Please try again later.";
+}
 }
 
 export async function getCurrentUserInfo(username: string, jwt: string) {
@@ -43,13 +41,12 @@ export async function getCurrentUserInfo(username: string, jwt: string) {
         }
       })
       return response.data;
-  } catch (error: any) {
-      if (error.response) {
-        throw error.response.data.message;
-      } else {
-        throw 'An error occurred. Please try again later.';
-      }
+  } catch (error: unknown) {
+    if (axios.isAxiosError(error)) {
+        throw error.response?.data?.message || "An unexpected error occurred.";
     }
+    throw "An error occurred. Please try again later.";
+}
 }
 
 export async function getGeneratedImage(selectionName: string, typeOfContent:string) {

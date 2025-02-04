@@ -1,7 +1,7 @@
 import { useLocation } from "react-router-dom";
 import ChoiceDisplay from "../components/ChoiceDisplay";
 import { addImageUrl, getCurrentUserInfo, getGeneratedImage, uploadImageToBB } from "../CallsToBackend";
-import { useState } from "react";
+import { MouseEvent, useState } from "react";
 import Button from "../components/Button";
 import { BeatLoader } from 'react-spinners'
 
@@ -14,27 +14,29 @@ export default function GenerationPage() {
     const [saveLoading, setSaveLoading] = useState(false); // true = testing, false = intended!
     const [copyText, setCopyText]= useState('Copy (2h)');
     const [saveText, setSaveText]= useState('Add to Collection');
+    const [generateMore, setGenerateMore] = useState('Get a generated picture based on your choice!')
     const [generatingText, setGeneratingText] = useState('Generating');
 
-    const handleImageHandler = async (e) => {
+    const handleImageHandler = async (e?: MouseEvent<HTMLButtonElement>) => {
         setCopyText('Copy (2h)');
         setSaveText('Add to Collection')
         try {
             setIsLoading(true);
-            e.preventDefault();
+            e?.preventDefault();
         
             const result = await getGeneratedImage(name, type);
         
             if (result && result.data && result.data.length > 0) {
             setGeneratedImage(result.data[0].url);
+            setGenerateMore('Generate another');
             } else {
             console.error("No image returned from OpenAI");
             }
             setGeneratingText('')
             setIsLoading(false);
-        } catch (e) {
+        } catch (error) {
             setIsLoading(false);
-            console.log(e);
+            console.log(error);
         }
         };
 
@@ -59,38 +61,41 @@ export default function GenerationPage() {
         }
       
         try {
-            const uploadImg = await uploadImageToBB(generatedImage, currentJWT);
-            if (uploadImg.error) {
-                console.log("Failed to upload to collection:", uploadImg.error);
-                setGeneratingText("Failed to upload to collection");
-                setSaveLoading(false);
-            } else {
-                console.log("Uploaded successfully:", uploadImg);
-                setGeneratingText("Uploaded successfully");
-                setSaveLoading(false);
-            }
+            if (currentJWT && currentUser){ 
+                const uploadImg = await uploadImageToBB(generatedImage, currentJWT);
+                if (uploadImg.error) {
+                    console.log("Failed to upload to collection:", uploadImg.error);
+                    setGeneratingText("Failed to upload to collection");
+                    setSaveLoading(false);
+                } else {
+                    console.log("Uploaded successfully:", uploadImg);
+                    setGeneratingText("Uploaded successfully");
+                    setSaveLoading(false);
+                }
 
-            const userResponse = await getCurrentUserInfo(currentUser, currentJWT)
-            const existingUrls = userResponse.myurls || [];
-      
-            if (existingUrls.includes(uploadImg.data.image.url)) {
-                console.log("This URL is already in your collection.");
-                setGeneratingText("This URL is already in your collection.");
-                setSaveLoading(false);
-                return;
-            }
+                
+                const userResponse = await getCurrentUserInfo(currentUser, currentJWT)
+                const existingUrls = userResponse.myurls || [];
+        
+                if (existingUrls.includes(uploadImg.data.image.url)) {
+                    console.log("Already in your collection.");
+                    setGeneratingText("Already in your collection.");
+                    setSaveLoading(false);
+                    return;
+                }
 
-            const response = await addImageUrl(uploadImg.data.image.url, currentJWT);
-      
-            if (response.error) {
-                console.log("Failed to save URL to collection:", response.error);
-                setGeneratingText("Failed to save URL to collection");
-                setSaveLoading(false);
-            } else {
-                console.log("URL added successfully:", response.urls);
-                setGeneratingText("URL added successfully");
-                setSaveLoading(false);
-            }
+                const response = await addImageUrl(uploadImg.data.image.url, currentJWT);
+        
+                if (response.error) {
+                    console.log("Failed to save to collection:", response.error);
+                    setGeneratingText("Failed to save to collection");
+                    setSaveLoading(false);
+                } else {
+                    console.log("Added to collection successfully:", response.urls);
+                    setGeneratingText("Added to collection successfully");
+                    setSaveLoading(false);
+                }
+        }
         } catch (error) {
             console.error("Error saving to collection:", error);
             setGeneratingText("Error saving to collection");
@@ -110,7 +115,7 @@ export default function GenerationPage() {
                 isClickable={false}
             />
             <div className='m-2'>
-                <button onClick={handleImageHandler} className='m-2'>Get a generated picture based on your choice!</button>
+                <Button destination="#" buttontext={generateMore} onClickFunction={handleImageHandler} size="larger" disabled={saveLoading}/>
             </div>
                 {loading ? (
                     <div className={`p-4 rounded shadow border border-gray-300 max-w-xs mx-auto transition-all duration-300 hover:shadow-lg`}>

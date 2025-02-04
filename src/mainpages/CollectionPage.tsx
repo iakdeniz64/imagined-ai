@@ -5,20 +5,27 @@ import { useEffect, useState } from "react";
 import JsFileDownloader from 'js-file-downloader';
 
 export default function CollectionPage() {
-    const [userInfo, setUserInfo] = useState({ myusername: '', myurls: [] }); //.myusername = string, .myurls = array
+    const [userInfo, setUserInfo] = useState<{ myusername: string; myurls: string[] }>({
+        myusername: "",
+        myurls: [],
+    }); //.myusername = string, .myurls = array
     const currentUser = localStorage.getItem("CurrentUser")
     const currentJWT = localStorage.getItem("JWToken")
     const navigate = useNavigate();
 
     useEffect(() => {
-        if ((localStorage.getItem("JWToken")) == '' || (localStorage.getItem("CurrentUser")) == '') {
+        const currentUser = localStorage.getItem("CurrentUser")
+        const currentJWT = localStorage.getItem("JWToken")
+        if (!currentUser || !currentJWT) {
             navigate('/')
 
         } else {
-            getCurrentUserInfo((localStorage.getItem("CurrentUser")), (localStorage.getItem("JWToken"))).
-            then((element) =>
-                setUserInfo(element)
-            )
+            if (currentUser && currentJWT){
+                getCurrentUserInfo(currentUser, currentJWT).
+                then((element) =>
+                    setUserInfo(element)
+                )
+            }
         }
     }, []);
 
@@ -34,16 +41,17 @@ export default function CollectionPage() {
     }
 
     const handleRemoveImage = async (url: string) => {
-        if (currentJWT !== ''){
+        if (currentJWT && currentUser){
             try {
-                const renewedList = await removeImageUrl(url, currentJWT).then((element) => {
+                const renewedList = await removeImageUrl(url, currentJWT).then((element): { myusername: string; myurls: string[] } => {
                     return {
                         myusername: currentUser,
-                        myurls: element.urls,
+                        myurls: element.urls ?? userInfo.myurls,
                     };
                 });
     
                 setUserInfo(renewedList);
+
             } catch (error) {
                 console.error('Error removing image:', error);
             }

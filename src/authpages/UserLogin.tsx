@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { FormEvent, useEffect, useState } from 'react';
 import { loginUser } from '../CallsToBackend';
 import { useNavigate } from "react-router-dom";
 import Button from '../components/Button';
@@ -10,7 +10,7 @@ export default function UserLogin(){
   const [success, setSuccess] = useState('');
   const navigate = useNavigate();
 
-  const handleSubmit = async (event: any) => {
+  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     setError('');
     setSuccess('');
@@ -22,10 +22,13 @@ export default function UserLogin(){
       setUsername('');
       setPassword('');
       navigate('/')
-    } catch (err: any) {
-      setError(err);
-    }
-  };
+    } catch (err: unknown) {
+      if (err instanceof Error) {
+          setError(err.message);
+      } else {
+          setError('An unexpected error occurred.');
+      }
+  }};
 
   useEffect(() => {
     if (localStorage.getItem("JWToken")){
